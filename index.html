@@ -165,6 +165,9 @@
       body { cursor: auto; }
       #cursor { display: none; }
     }
+    /* ── FACT TOASTS ── */
+#fact-toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: rgba(108,99,255,0.15); border: 1px solid rgba(108,99,255,0.4); color: var(--text); padding: 0.85rem 1.5rem; border-radius: 100px; font-size: 0.82rem; z-index: 9990; opacity: 0; transition: opacity 0.5s ease; pointer-events: none; white-space: nowrap; backdrop-filter: blur(10px); }
+#fact-toast.show { opacity: 1; }
     /* ── LIGHTBOX ── */
 #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 9998; align-items: center; justify-content: center; }
 #lightbox.active { display: flex; }
@@ -518,6 +521,7 @@
   <span id="lightbox-close" onclick="closeLightbox()">×</span>
   <img id="lightbox-img" src="" alt=""/>
 </div>
+  <div id="fact-toast"></div>
 <footer>
   <p>© 2026 Ramana V S &nbsp;·&nbsp; Built with passion and published on GitHub Pages</p>
 </footer>
@@ -571,6 +575,33 @@
     imgs[index].classList.add('active');
     if (dots[index]) dots[index].classList.add('active');
   }
+  // ── Fact Toasts ──
+const facts = [
+  "💡 Did you know? Tap any image to view it full screen!",
+  "📄 You can download Ramana's resume directly from the Contact section.",
+  "🔗 Hover over the skill tags in About to explore the tech stack."
+];
+
+let lastFact = -1;
+let toastTimer = null;
+
+function showFact() {
+  const toast = document.getElementById('fact-toast');
+  if (toast.classList.contains('show')) return;
+  let index;
+  do { index = Math.floor(Math.random() * facts.length); } while (index === lastFact);
+  lastFact = index;
+  toast.textContent = facts[index];
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+let scrollCount = 0;
+window.addEventListener('scroll', () => {
+  scrollCount++;
+  if (scrollCount % 8 === 0) showFact();
+});
 // ── Lightbox ──
 function openLightbox(src) {
   document.getElementById('lightbox-img').src = src;
