@@ -575,23 +575,21 @@
     imgs[index].classList.add('active');
     if (dots[index]) dots[index].classList.add('active');
   }
-  // ── Fact Toasts ──
+ // ── Fact Toasts ──
 const facts = [
-  "💡 Did you know? Tap any image to view it full screen!",
   "📄 You can download Ramana's resume directly from the Contact section.",
-  "🔗 Hover over the skill tags in About to explore the tech stack."
+  "💡 Tap any image to view it full screen!",
+  "🎨 Hover over the skill tags in the About section!"
 ];
 
-let lastFact = -1;
+let factIndex = 0;
 let toastTimer = null;
 
 function showFact() {
   const toast = document.getElementById('fact-toast');
   if (toast.classList.contains('show')) return;
-  let index;
-  do { index = Math.floor(Math.random() * facts.length); } while (index === lastFact);
-  lastFact = index;
-  toast.textContent = facts[index];
+  toast.textContent = facts[factIndex];
+  factIndex = (factIndex + 1) % facts.length;
   toast.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toast.classList.remove('show'), 4000);
